@@ -4,15 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Walls</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#384348;
   --bg-end:#625A5F;
   --surface:rgba(255,255,255,.07);
-  --surface2:rgba(255,255,255,.11);
-  --surface3:rgba(255,255,255,.15);
+  --surface2:rgba(255,255,255,.12);
   --border:rgba(255,255,255,.10);
   --border2:rgba(255,255,255,.18);
   --text:#f2eeeb;
@@ -23,170 +22,538 @@
   --accent-strong:#d4b49a;
   --green:#8fd5b0;
   --orange:#e8a87c;
-  --sidebar-w:220px;--radius:14px;--radius-pill:100px;
+  --topbar-h:56px;
+  --bottom-bar-h:60px;
+  --radius:14px;
+  --pill:100px;
+  --sidebar-w:230px;
 }
-html,body{height:100%;overflow:hidden}
+
+/* ── Base ── */
+html{height:100%}
 body{
-  background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 60%,var(--bg-end) 100%);
+  min-height:100%;
+  background:#384348;
+  background-image:linear-gradient(180deg,#384348 0%,#384348 55%,#625A5F 100%);
   background-attachment:fixed;
   color:var(--text);
   font-family:'Poppins',sans-serif;
-  font-size:13.5px;
+  font-size:14px;
   line-height:1.5;
   display:flex;
   flex-direction:column;
+  /* prevent body scroll — handled per-section */
+  height:100dvh;
+  overflow:hidden;
 }
-body::before{content:'';position:fixed;inset:0;background:linear-gradient(180deg,#384348 0%,#384348 55%,#625A5F 100%);z-index:-1;pointer-events:none}
 
-/* Top bar */
-.topbar{position:relative;z-index:10;height:52px;flex-shrink:0;display:flex;align-items:center;gap:14px;padding:0 20px;background:rgba(40,50,54,.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.logo{display:flex;align-items:center;gap:9px;font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--text);letter-spacing:-.01em;flex-shrink:0;margin-right:4px}
-.logo-mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#8fa8b0,#4a6068);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* ── Topbar ── */
+.topbar{
+  height:var(--topbar-h);
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 16px;
+  background:rgba(38,48,52,.65);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+  position:relative;
+  z-index:50;
+}
+.logo{
+  display:flex;align-items:center;gap:8px;
+  font-size:15px;font-weight:600;color:var(--text);
+  letter-spacing:-.02em;flex-shrink:0;text-decoration:none;
+}
+.logo-mark{
+  width:28px;height:28px;border-radius:8px;
+  background:linear-gradient(135deg,#8fa8b0,#4a6068);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
 .logo-mark svg{width:13px;height:13px;fill:#fff}
-.breadcrumb{flex:1;display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);overflow:hidden}
-.breadcrumb .root{color:var(--text2)}
-.breadcrumb .sep{color:var(--muted2);font-size:11px}
-.breadcrumb .current{color:var(--text);font-weight:500}
-.search-wrap{position:relative;display:flex;align-items:center;flex-shrink:0}
-.search-wrap svg{position:absolute;left:12px;width:13px;height:13px;stroke:var(--muted);fill:none;stroke-width:1.8;pointer-events:none}
-#search{background:rgba(255,255,255,.06);border:1px solid var(--border2);border-radius:var(--radius-pill);padding:7px 16px 7px 34px;color:var(--text);font-family:'Poppins',sans-serif;font-size:12px;width:210px;outline:none;transition:border-color .15s,background .15s,width .2s}
+
+/* search — grows to fill */
+.search-wrap{
+  flex:1;position:relative;display:flex;align-items:center;
+  max-width:380px;
+}
+.search-wrap svg{
+  position:absolute;left:11px;width:14px;height:14px;
+  stroke:var(--muted);fill:none;stroke-width:1.8;pointer-events:none;
+}
+#search{
+  width:100%;background:rgba(255,255,255,.08);
+  border:1px solid var(--border2);border-radius:var(--pill);
+  padding:8px 14px 8px 34px;
+  color:var(--text);font-family:'Poppins',sans-serif;font-size:13px;
+  outline:none;transition:border-color .15s,background .15s;
+  -webkit-appearance:none;
+}
 #search::placeholder{color:var(--muted)}
-#search:focus{border-color:rgba(167,139,250,.4);background:rgba(255,255,255,.09);width:240px}
-.count-pill{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:var(--radius-pill);padding:4px 12px;font-size:11.5px;color:var(--muted);font-family:'DM Mono',monospace;white-space:nowrap;flex-shrink:0}
-count-pill b{color:var(--accent);font-weight:500;font-family:'Poppins',sans-serif;}
+#search:focus{border-color:rgba(232,213,196,.4);background:rgba(255,255,255,.11)}
 
-/* Shell */
-.shell{display:flex;flex:1;overflow:hidden;position:relative;z-index:1}
+.count-pill{
+  background:rgba(255,255,255,.06);border:1px solid var(--border);
+  border-radius:var(--pill);padding:5px 11px;
+  font-size:11px;color:var(--muted);
+  font-family:'DM Mono',monospace;white-space:nowrap;flex-shrink:0;
+}
+.count-pill b{color:var(--accent);font-weight:500}
 
-/* Sidebar */
-.sidebar{width:var(--sidebar-w);flex-shrink:0;display:flex;flex-direction:column;background:rgba(30,40,44,.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-right:1px solid var(--border);overflow:hidden}
-.sidebar-header{padding:16px 16px 8px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);flex-shrink:0}
+/* hamburger — mobile only */
+.menu-btn{
+  display:none;
+  width:36px;height:36px;border-radius:9px;
+  background:rgba(255,255,255,.08);border:1px solid var(--border2);
+  align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
+}
+.menu-btn svg{width:16px;height:16px;stroke:var(--text2);fill:none;stroke-width:1.8}
+
+/* ── Shell ── */
+.shell{
+  display:flex;flex:1;overflow:hidden;
+}
+
+/* ── Sidebar (desktop) ── */
+.sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  display:flex;flex-direction:column;
+  background:rgba(28,38,42,.5);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-right:1px solid var(--border);
+  overflow:hidden;
+  /* desktop always visible */
+  transition:none;
+}
+.sidebar-header{
+  padding:16px 16px 8px;
+  font-size:10px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted2);flex-shrink:0;
+}
 .sidebar-scroll{flex:1;overflow-y:auto;padding:0 8px 16px}
 .sidebar-scroll::-webkit-scrollbar{width:3px}
 .sidebar-scroll::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
-.cat-row{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:background .1s,color .1s;user-select:none;position:relative}
+
+.cat-row{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;border-radius:9px;
+  cursor:pointer;font-size:13px;color:var(--text2);
+  transition:background .1s,color .1s;
+  user-select:none;position:relative;
+  -webkit-tap-highlight-color:transparent;
+}
 .cat-row:hover{background:rgba(255,255,255,.05);color:var(--text)}
+.cat-row:active{background:rgba(255,255,255,.08)}
 .cat-row.active{background:rgba(232,213,196,.12);color:var(--accent)}
-.cat-row.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--accent-strong);border-radius:0 3px 3px 0}
-.cat-icon{width:15px;height:15px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.4;opacity:.7}
+.cat-row.active::before{
+  content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:3px;height:60%;background:var(--accent-strong);border-radius:0 3px 3px 0;
+}
+.cat-icon{width:15px;height:15px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.4;opacity:.65}
 .cat-row.active .cat-icon{opacity:1}
 .cat-label{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cat-n{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted2);flex-shrink:0}
+.cat-n{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--muted2);flex-shrink:0}
 .cat-row.active .cat-n{color:var(--accent-strong);opacity:.7}
+.src-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .sidebar-div{height:1px;background:var(--border);margin:8px 10px}
 
-/* Sidebar skeleton */
-.skel-row{height:28px;border-radius:8px;margin:2px 0;background:linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.09) 50%,rgba(255,255,255,.05) 75%);background-size:200% 100%;animation:sh 1.5s infinite}
-
-/* Main */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.toolbar{display:flex;align-items:center;gap:10px;padding:9px 18px;border-bottom:1px solid var(--border);flex-shrink:0;background:rgba(30,40,44,.35)}
-.toolbar-label{flex:1;font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;color:var(--text);letter-spacing:-.01em}
-.toolbar-sub{font-family:'Poppins',sans-serif;font-size:11px;font-weight:300;color:var(--muted);font-style:normal}
-.grid-wrap{flex:1;overflow-y:auto}
-.grid-wrap::-webkit-scrollbar{width:5px}
-.grid-wrap::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:3px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;padding:16px 18px}
-
-/* Cards */
-.card{border-radius:var(--radius);overflow:hidden;background:rgba(40,52,56,.6);border:1px solid var(--border);cursor:pointer;position:relative;aspect-ratio:16/9;transition:transform .18s cubic-bezier(.25,.8,.25,1),border-color .18s,box-shadow .18s}
-.card:hover{transform:translateY(-3px) scale(1.005);border-color:var(--border2);box-shadow:0 8px 32px rgba(0,0,0,.28)}
-.card:hover .overlay{opacity:1}
-.card-img{width:100%;height:100%;object-fit:cover;display:block;background:rgba(40,52,56,.6)}
-.shimmer{background:linear-gradient(90deg,rgba(40,52,56,.7) 25%,rgba(70,82,86,.5) 50%,rgba(40,52,56,.7) 75%);background-size:200% 100%;animation:sh 1.5s infinite}
+/* skeleton shimmer */
+.skel-row{
+  height:30px;border-radius:9px;margin:2px 0;
+  background:linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.09) 50%,rgba(255,255,255,.05) 75%);
+  background-size:200% 100%;animation:sh 1.5s infinite;
+}
 @keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,12,25,.85) 0%,transparent 55%);opacity:0;transition:opacity .18s;display:flex;flex-direction:column;justify-content:flex-end;padding:11px;gap:7px}
-.card-name{font-size:11px;color:rgba(255,255,255,.9);font-weight:400;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── Main area ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+.toolbar{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 16px;border-bottom:1px solid var(--border);
+  flex-shrink:0;background:rgba(28,38,42,.3);
+}
+.toolbar-label{
+  flex:1;font-size:14px;font-weight:600;color:var(--text);
+  letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.toolbar-sub{font-size:11px;font-weight:300;color:var(--muted)}
+
+/* Category chip strip — mobile horizontal scroll */
+.cat-strip{
+  display:none;
+  padding:8px 12px;gap:6px;
+  overflow-x:auto;flex-shrink:0;
+  border-bottom:1px solid var(--border);
+  background:rgba(28,38,42,.3);
+  scrollbar-width:none;
+}
+.cat-strip::-webkit-scrollbar{display:none}
+.cat-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:var(--pill);
+  font-size:12px;color:var(--text2);
+  background:rgba(255,255,255,.07);
+  border:1px solid var(--border);
+  white-space:nowrap;cursor:pointer;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .1s,color .1s,border-color .1s;
+}
+.cat-chip:active{background:rgba(255,255,255,.14)}
+.cat-chip.active{
+  background:rgba(232,213,196,.14);
+  border-color:rgba(232,213,196,.3);
+  color:var(--accent);font-weight:500;
+}
+.chip-n{font-family:'DM Mono',monospace;font-size:10px;opacity:.6}
+
+/* ── Grid ── */
+.grid-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.grid-wrap::-webkit-scrollbar{width:4px}
+.grid-wrap::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:12px;padding:14px 16px;
+}
+
+/* ── Cards ── */
+.card{
+  border-radius:var(--radius);overflow:hidden;
+  background:rgba(38,50,54,.65);
+  border:1px solid var(--border);
+  cursor:pointer;position:relative;
+  aspect-ratio:16/9;
+  transition:transform .16s cubic-bezier(.25,.8,.25,1),border-color .16s,box-shadow .16s;
+  -webkit-tap-highlight-color:transparent;
+}
+/* hover only on pointer devices */
+@media(hover:hover){
+  .card:hover{transform:translateY(-3px) scale(1.006);border-color:var(--border2);box-shadow:0 8px 28px rgba(0,0,0,.3)}
+  .card:hover .overlay{opacity:1}
+}
+.card:active{transform:scale(.98)}
+.card-img{width:100%;height:100%;object-fit:cover;display:block;background:rgba(38,50,54,.65)}
+.shimmer{
+  background:linear-gradient(90deg,rgba(38,50,54,.8) 25%,rgba(68,80,84,.5) 50%,rgba(38,50,54,.8) 75%);
+  background-size:200% 100%;animation:sh 1.5s infinite;
+}
+.overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(10,14,16,.88) 0%,rgba(10,14,16,.2) 45%,transparent 70%);
+  opacity:0;transition:opacity .16s;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:10px;gap:6px;
+}
+/* On touch devices always show overlay */
+@media(hover:none){.overlay{opacity:1}}
+.card-name{
+  font-size:11px;color:rgba(255,255,255,.88);font-weight:400;
+  line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
 .card-foot{display:flex;align-items:center;justify-content:space-between;gap:6px}
-.src-pill{font-size:9.5px;font-weight:600;letter-spacing:.04em;padding:2px 7px;border-radius:var(--radius-pill);border:1px solid}
-.src-pill.vyrx{color:var(--green);border-color:rgba(126,232,162,.25);background:rgba(126,232,162,.08)}
-.src-pill.dharmx{color:var(--orange);border-color:rgba(244,162,107,.25);background:rgba(244,162,107,.08)}
-.dl-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-pill);padding:4px 10px;font-size:10.5px;color:#fff;cursor:pointer;font-family:'Poppins',sans-serif;font-weight:500;text-decoration:none;transition:background .12s;white-space:nowrap}
-.dl-btn:hover{background:rgba(255,255,255,.22)}
-.dl-btn svg{width:9px;height:9px;stroke:#fff;fill:none;stroke-width:2;flex-shrink:0}
+.src-pill{
+  font-size:9px;font-weight:600;letter-spacing:.04em;
+  padding:2px 7px;border-radius:var(--pill);border:1px solid;
+}
+.src-pill.vyrx{color:var(--green);border-color:rgba(143,213,176,.25);background:rgba(143,213,176,.08)}
+.src-pill.dharmx{color:var(--orange);border-color:rgba(232,168,124,.25);background:rgba(232,168,124,.08)}
 
-/* Status / error */
-.status-msg{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:12px;padding:60px 20px;color:var(--muted);text-align:center}
-.status-msg svg{width:34px;height:34px;stroke:var(--muted2);fill:none}
-.status-msg p{font-family:'Poppins',sans-serif;font-weight:500;font-size:13px}
-.status-msg small{font-size:11px;color:var(--muted2);max-width:380px;line-height:1.6}
-.retry-btn{margin-top:4px;display:inline-flex;align-items:center;gap:6px;background:rgba(232,213,196,.1);border:1px solid rgba(232,213,196,.25);border-radius:var(--radius-pill);padding:7px 16px;font-size:12px;color:var(--accent);cursor:pointer;font-family:'Poppins',sans-serif;transition:background .12s}
-.retry-btn:hover{background:rgba(232,213,196,.18)}
+/* inline card download — shown always on touch */
+.card-dl{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.22);
+  color:#fff;cursor:pointer;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .12s;
+}
+.card-dl:active{background:rgba(255,255,255,.3)}
+.card-dl svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:2.2}
 
-/* Lightbox */
-.lightbox{display:none;position:fixed;inset:0;z-index:999;background:rgba(30,38,40,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);align-items:center;justify-content:center;padding:28px}
+/* ── Status messages ── */
+.status-msg{
+  grid-column:1/-1;display:flex;flex-direction:column;
+  align-items:center;gap:12px;padding:60px 20px;
+  color:var(--muted);text-align:center;
+}
+.status-msg svg{width:36px;height:36px;stroke:var(--muted2);fill:none}
+.status-msg p{font-weight:500;font-size:14px;color:var(--text2)}
+.status-msg small{font-size:12px;color:var(--muted2);max-width:340px;line-height:1.6}
+.retry-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(232,213,196,.1);border:1px solid rgba(232,213,196,.25);
+  border-radius:var(--pill);padding:8px 18px;
+  font-size:13px;color:var(--accent);cursor:pointer;
+  font-family:'Poppins',sans-serif;transition:background .12s;
+  -webkit-tap-highlight-color:transparent;
+}
+.retry-btn:active{background:rgba(232,213,196,.2)}
+
+/* ── Lightbox ── */
+.lightbox{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(22,28,30,.95);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:0;
+}
 .lightbox.open{display:flex}
-.lb-inner{position:relative;max-width:min(1300px,92vw);display:flex;flex-direction:column;gap:16px;align-items:center}
-.lb-img{max-width:100%;max-height:80vh;border-radius:18px;object-fit:contain;display:block;border:1px solid var(--border2)}
-.lb-bar{display:flex;align-items:center;justify-content:space-between;width:100%;gap:16px}
-.lb-name{font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-.lb-actions{display:flex;gap:8px;flex-shrink:0;align-items:center}
-.lb-dl{display:inline-flex;align-items:center;gap:7px;background:rgba(232,213,196,.15);border:1px solid rgba(232,213,196,.3);border-radius:var(--radius-pill);padding:8px 20px;font-size:13px;color:var(--accent);cursor:pointer;font-family:'Poppins',sans-serif;font-weight:500;text-decoration:none;transition:background .12s,border-color .12s;white-space:nowrap}
-.lb-dl:hover{background:rgba(232,213,196,.25);border-color:rgba(232,213,196,.45)}
-.lb-dl svg{width:13px;height:13px;stroke:var(--accent);fill:none;stroke-width:2}
-.lb-close{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid var(--border2);border-radius:var(--radius-pill);padding:8px 16px;font-size:13px;color:var(--text2);cursor:pointer;font-family:'Poppins',sans-serif;transition:background .12s,color .12s}
-.lb-close:hover{background:rgba(255,255,255,.1);color:var(--text)}
 
+.lb-inner{
+  display:flex;flex-direction:column;
+  width:100%;height:100%;
+  max-width:1100px;
+  margin:0 auto;
+  padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);
+}
+
+/* top strip in lightbox */
+.lb-top{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;flex-shrink:0;
+}
+.lb-name{
+  flex:1;font-size:13px;font-weight:500;color:var(--text2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.lb-close-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.08);border:1px solid var(--border2);
+  color:var(--text2);cursor:pointer;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;transition:background .12s;
+}
+.lb-close-btn:active{background:rgba(255,255,255,.16)}
+.lb-close-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* image fills remaining space */
+.lb-img-wrap{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:0 12px;overflow:hidden;
+}
+.lb-img{
+  max-width:100%;max-height:100%;
+  border-radius:14px;object-fit:contain;display:block;
+  border:1px solid var(--border2);
+}
+
+/* bottom action bar */
+.lb-bottom{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:16px;flex-shrink:0;
+}
+.lb-dl-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(232,213,196,.18);
+  border:1px solid rgba(232,213,196,.32);
+  border-radius:var(--pill);
+  padding:12px 28px;
+  font-size:14px;font-weight:500;
+  color:var(--accent);cursor:pointer;
+  font-family:'Poppins',sans-serif;
+  text-decoration:none;
+  transition:background .12s,border-color .12s;
+  -webkit-tap-highlight-color:transparent;
+}
+.lb-dl-btn:active{background:rgba(232,213,196,.3);border-color:rgba(232,213,196,.5)}
+.lb-dl-btn svg{width:16px;height:16px;stroke:var(--accent);fill:none;stroke-width:2}
+
+/* ── Mobile bottom nav bar ── */
+.bottom-nav{
+  display:none;
+  height:var(--bottom-bar-h);
+  flex-shrink:0;
+  align-items:stretch;
+  background:rgba(38,48,52,.75);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-top:1px solid var(--border);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.bnav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;
+  font-size:10px;color:var(--muted);cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:color .1s;
+}
+.bnav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6}
+.bnav-btn.active{color:var(--accent)}
+.bnav-btn.active svg{stroke-width:2}
+
+/* ── Drawer (mobile categories) ── */
+.drawer-overlay{
+  display:none;position:fixed;inset:0;z-index:100;
+  background:rgba(10,14,16,.5);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+.drawer-overlay.open{display:block}
+.drawer{
+  position:fixed;bottom:0;left:0;right:0;z-index:101;
+  background:linear-gradient(180deg,#3a4a4f 0%,#384348 100%);
+  border-top:1px solid var(--border2);
+  border-radius:20px 20px 0 0;
+  display:flex;flex-direction:column;
+  max-height:75dvh;
+  transform:translateY(100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.drawer.open{transform:translateY(0)}
+.drawer-handle{
+  width:36px;height:4px;border-radius:2px;
+  background:rgba(255,255,255,.2);
+  margin:12px auto 0;flex-shrink:0;
+}
+.drawer-title{
+  font-size:12px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted2);
+  padding:12px 16px 8px;flex-shrink:0;
+}
+.drawer-list{overflow-y:auto;padding:0 10px 16px;-webkit-overflow-scrolling:touch}
+
+/* ── Responsive breakpoints ── */
+
+/* Tablet: hide count pill, smaller sidebar */
+@media(max-width:900px){
+  :root{--sidebar-w:190px}
+  .count-pill{display:none}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+}
+
+/* Mobile: hide sidebar, show bottom nav + drawer + chip strip */
 @media(max-width:640px){
-  :root{--sidebar-w:160px}
-  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;padding:10px 12px}
-  #search{width:140px}.topbar{padding:0 12px;gap:8px}.toolbar{padding:8px 12px}
+  body{height:100dvh}
+  .sidebar{display:none}
+  .cat-strip{display:flex}
+  .menu-btn{display:flex}
+  .count-pill{display:none}
+  .breadcrumb{display:none}
+  .bottom-nav{display:flex}
+  .grid{
+    grid-template-columns:repeat(auto-fill,minmax(155px,1fr));
+    gap:8px;padding:10px 12px;
+  }
+  .topbar{padding:0 12px;gap:8px}
+  /* let search expand naturally */
+  #search{font-size:14px}
+  /* lightbox: name on top-bar, download big at bottom */
+  .lb-img{border-radius:10px}
+}
+
+@media(max-width:400px){
+  .grid{grid-template-columns:repeat(2,1fr);gap:7px;padding:8px 10px}
 }
 </style>
 </head>
 <body>
 
+<!-- ── Topbar ── -->
 <header class="topbar">
   <div class="logo">
     <div class="logo-mark"><svg viewBox="0 0 13 13"><path d="M6.5 1L1 6.5l5.5 5.5 5.5-5.5z"/></svg></div>
     Walls
   </div>
+
   <div class="breadcrumb">
     <span class="root">Library</span>
     <span class="sep">/</span>
     <span class="current" id="bc-current">All</span>
   </div>
+
   <div class="search-wrap">
     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input id="search" type="text" placeholder="Search wallpapers…" autocomplete="off">
+    <input id="search" type="search" placeholder="Search…" autocomplete="off" autocorrect="off" spellcheck="false">
   </div>
+
   <div class="count-pill"><b id="count-val">—</b> images</div>
+
+  <!-- hamburger: mobile only -->
+  <button class="menu-btn" onclick="openDrawer()" aria-label="Categories">
+    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
 </header>
 
+<!-- ── Shell ── -->
 <div class="shell">
+
+  <!-- Sidebar: desktop -->
   <nav class="sidebar">
     <div class="sidebar-header">Categories</div>
     <div class="sidebar-scroll" id="sidebar-list">
-      <!-- skeletons while loading -->
-      ${Array(12).fill('<div class="skel-row"></div>').join('')}
+      <div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div>
+      <div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div>
+      <div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div>
     </div>
   </nav>
+
+  <!-- Main -->
   <div class="main">
     <div class="toolbar">
       <div class="toolbar-label" id="toolbar-label">Loading…</div>
     </div>
-    <div class="grid-wrap"><div class="grid" id="grid">
-      <div class="status-msg">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        <p>Fetching wallpapers…</p>
-        <small>Loading full file lists from both GitHub repositories. This only happens once.</small>
+
+    <!-- Horizontal chip strip: mobile -->
+    <div class="cat-strip" id="cat-strip"></div>
+
+    <div class="grid-wrap">
+      <div class="grid" id="grid">
+        <div class="status-msg">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <p>Fetching wallpapers…</p>
+          <small>Loading from both GitHub repos. This takes a moment on first load.</small>
+        </div>
       </div>
-    </div></div>
+    </div>
   </div>
+
 </div>
 
-<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLb()">
+<!-- ── Mobile bottom nav ── -->
+<nav class="bottom-nav">
+  <div class="bnav-btn active" id="bnav-home" onclick="setCat('__all__');setNavActive('home')">
+    <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
+    All
+  </div>
+  <div class="bnav-btn" id="bnav-cats" onclick="openDrawer();setNavActive('cats')">
+    <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+    Categories
+  </div>
+  <div class="bnav-btn" id="bnav-search" onclick="document.getElementById('search').focus();setNavActive('search')">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    Search
+  </div>
+</nav>
+
+<!-- ── Drawer (mobile categories) ── -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-title">Categories</div>
+  <div class="drawer-list" id="drawer-list"></div>
+</div>
+
+<!-- ── Lightbox ── -->
+<div class="lightbox" id="lightbox">
   <div class="lb-inner">
-    <img class="lb-img" id="lb-img" src="" alt="">
-    <div class="lb-bar">
+    <div class="lb-top">
       <div class="lb-name" id="lb-name"></div>
-      <div class="lb-actions">
-        <a class="lb-dl" id="lb-dl" href="#" target="_blank">
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download
-        </a>
-        <button class="lb-close" onclick="closeLb()">Close</button>
-      </div>
+      <button class="lb-close-btn" onclick="closeLb()" aria-label="Close">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="lb-img-wrap">
+      <img class="lb-img" id="lb-img" src="" alt="">
+    </div>
+    <div class="lb-bottom">
+      <a class="lb-dl-btn" id="lb-dl" href="#" aria-label="Download wallpaper">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Wallpaper
+      </a>
     </div>
   </div>
 </div>
@@ -194,105 +561,59 @@ count-pill b{color:var(--accent);font-weight:500;font-family:'Poppins',sans-seri
 <script>
 // ── Config ────────────────────────────────────────────────────────────────────
 const REPOS = [
-  {
-    id: 'vyrx',
-    owner: 'vyrx-dev',
-    repo: 'Wallpapers',
-    branch: 'master',
-    raw: 'https://raw.githubusercontent.com/vyrx-dev/Wallpapers/master',
-    api: 'https://api.github.com/repos/vyrx-dev/Wallpapers',
-  },
-  {
-    id: 'dharmx',
-    owner: 'dharmx',
-    repo: 'walls',
-    branch: 'main',
-    raw: 'https://raw.githubusercontent.com/dharmx/walls/main',
-    api: 'https://api.github.com/repos/dharmx/walls',
-  },
+  { id:'vyrx',   raw:'https://raw.githubusercontent.com/vyrx-dev/Wallpapers/master', api:'https://api.github.com/repos/vyrx-dev/Wallpapers',   branch:'master' },
+  { id:'dharmx', raw:'https://raw.githubusercontent.com/dharmx/walls/main',          api:'https://api.github.com/repos/dharmx/walls',            branch:'main'   },
 ];
-
 const IMAGE_EXTS = new Set(['jpg','jpeg','png','webp','gif','bmp','tiff','tif','avif','svg']);
-const isImage = name => IMAGE_EXTS.has(name.split('.').pop().toLowerCase());
-const pretty = f => f.replace(/\.[^.]+$/, '').replace(/[_\-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+const isImage = n => IMAGE_EXTS.has(n.split('.').pop().toLowerCase());
+const pretty  = f => f.replace(/\.[^.]+$/,'').replace(/[_\-]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
 
-let ALL = [];          
-let CATS = [];         
-let activeCat = '__all__';
-let query = '';
-let loadError = false;
+// ── State ─────────────────────────────────────────────────────────────────────
+let ALL = [], CATS = [], activeCat = '__all__', query = '';
 
-//github api
+// ── Fetch ─────────────────────────────────────────────────────────────────────
 async function fetchRepoWalls(repo) {
-  const branchRes = await fetch(`${repo.api}/branches/${repo.branch}`);
-  if (!branchRes.ok) throw new Error(`Branch fetch failed for ${repo.repo}: ${branchRes.status}`);
-  const branchData = await branchRes.json();
-  const treeSha = branchData.commit.commit.tree.sha;
-
-  const treeRes = await fetch(`${repo.api}/git/trees/${treeSha}?recursive=1`);
-  if (!treeRes.ok) throw new Error(`Tree fetch failed for ${repo.repo}: ${treeRes.status}`);
-  const treeData = await treeRes.json();
-
-  const walls = [];
-  for (const item of treeData.tree) {
-    if (item.type !== 'blob') continue;
-    const parts = item.path.split('/');
-    if (parts.length !== 2) continue;
-    const [category, filename] = parts;
-    if (!isImage(filename)) continue;
-    if (category.startsWith('.')) continue;
-
-    walls.push({
-      src: `${repo.raw}/${parts.map(encodeURIComponent).join('/')}`,
-      name: pretty(filename),
-      filename,
-      category,
-      source: repo.id,
-    });
-  }
-  return walls;
+  const br = await fetch(`${repo.api}/branches/${repo.branch}`);
+  if (!br.ok) throw new Error(`Branch fetch failed ${repo.branch}: ${br.status}`);
+  const treeSha = (await br.json()).commit.commit.tree.sha;
+  const tr = await fetch(`${repo.api}/git/trees/${treeSha}?recursive=1`);
+  if (!tr.ok) throw new Error(`Tree fetch failed: ${tr.status}`);
+  const { tree } = await tr.json();
+  return tree
+    .filter(i => i.type === 'blob')
+    .map(i => i.path.split('/'))
+    .filter(p => p.length === 2 && isImage(p[1]) && !p[0].startsWith('.'))
+    .map(([category, filename]) => ({
+      src: `${repo.raw}/${[category,filename].map(encodeURIComponent).join('/')}`,
+      name: pretty(filename), filename, category, source: repo.id,
+    }));
 }
 
-//Load all repos
 async function loadAll() {
   try {
-    const results = await Promise.allSettled(REPOS.map(r => fetchRepoWalls(r)));
-
-    let hasAny = false;
-    for (let i = 0; i < results.length; i++) {
-      const r = results[i];
-      if (r.status === 'fulfilled') {
-        ALL.push(...r.value);
-        hasAny = true;
-        console.log(`${REPOS[i].id}: ${r.value.length} images loaded`);
-      } else {
-        console.error(`${REPOS[i].id} failed:`, r.reason);
-      }
-    }
-
-    if (!hasAny) throw new Error('All repos failed to load');
-
+    const results = await Promise.allSettled(REPOS.map(fetchRepoWalls));
+    let ok = false;
+    results.forEach((r, i) => {
+      if (r.status === 'fulfilled') { ALL.push(...r.value); ok = true; }
+      else console.error(REPOS[i].id, r.reason);
+    });
+    if (!ok) throw new Error('All repos failed');
     CATS = [...new Set(ALL.map(w => w.category))].sort();
-
-    renderSidebar();
-    renderGrid();
-
-  } catch (err) {
-    console.error('Load failed:', err);
-    loadError = true;
-    showError(err.message);
+    renderSidebar(); renderChips(); renderGrid();
+  } catch(e) {
+    showError(e.message);
   }
 }
 
 function showError(msg) {
-  document.getElementById('toolbar-label').innerHTML = `<span style="color:var(--muted)">Error loading</span>`;
+  document.getElementById('toolbar-label').innerHTML = '<span style="color:var(--muted)">Error</span>';
   document.getElementById('count-val').textContent = '0';
-  document.getElementById('sidebar-list').innerHTML = `<div style="padding:12px;font-size:12px;color:var(--muted)">Could not load categories.</div>`;
+  document.getElementById('sidebar-list').innerHTML = '<div style="padding:12px;font-size:12px;color:var(--muted)">Could not load.</div>';
   document.getElementById('grid').innerHTML = `
     <div class="status-msg">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <p>Failed to load wallpapers</p>
-      <small>${msg || 'Could not reach GitHub API. You may be rate-limited (60 req/hr for unauthenticated). Try again in a minute.'}</small>
+      <p>Could not load wallpapers</p>
+      <small>${msg || 'GitHub API may be rate-limited (60 req/hr). Try again in a minute.'}</small>
       <button class="retry-btn" onclick="location.reload()">↺ Retry</button>
     </div>`;
 }
@@ -303,50 +624,80 @@ function getFiltered() {
     if (activeCat !== '__all__' && w.category !== activeCat) return false;
     if (query) {
       const q = query.toLowerCase();
-      if (!w.name.toLowerCase().includes(q) && !w.category.toLowerCase().includes(q) && !w.filename.toLowerCase().includes(q)) return false;
+      return w.name.toLowerCase().includes(q) || w.category.toLowerCase().includes(q) || w.filename.toLowerCase().includes(q);
     }
     return true;
   });
 }
 
-// ── Sidebar ───────────────────────────────────────────────────────────────────
+// ── Sidebar (desktop) ─────────────────────────────────────────────────────────
 function renderSidebar() {
-  const el = document.getElementById('sidebar-list');
-  const allActive = activeCat === '__all__';
-  let h = `<div class="cat-row${allActive ? ' active' : ''}" onclick="setCat('__all__')">
+  const allA = activeCat === '__all__';
+  let h = `<div class="cat-row${allA?' active':''}" onclick="setCat('__all__')">
     <svg class="cat-icon" viewBox="0 0 16 16"><rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1.2"/><rect x="9" y="1.5" width="5.5" height="5.5" rx="1.2"/><rect x="1.5" y="9" width="5.5" height="5.5" rx="1.2"/><rect x="9" y="9" width="5.5" height="5.5" rx="1.2"/></svg>
     <span class="cat-label">All</span>
     <span class="cat-n">${ALL.length}</span>
   </div><div class="sidebar-div"></div>`;
 
   for (const cat of CATS) {
-    const n = ALL.filter(w => w.category === cat).length;
-    const a = activeCat === cat;
-    // count per source for colour hint
+    const n  = ALL.filter(w => w.category === cat).length;
     const vn = ALL.filter(w => w.category === cat && w.source === 'vyrx').length;
     const dn = ALL.filter(w => w.category === cat && w.source === 'dharmx').length;
-    const dot = vn && dn
-      ? `<span style="width:5px;height:5px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--orange));flex-shrink:0"></span>`
-      : vn
-      ? `<span style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0"></span>`
-      : `<span style="width:5px;height:5px;border-radius:50%;background:var(--orange);flex-shrink:0"></span>`;
-
-    h += `<div class="cat-row${a ? ' active' : ''}" onclick="setCat('${cat.replace(/'/g,"\\'")}')">
-      <svg class="cat-icon" viewBox="0 0 16 16"><path d="M1.5 5.5h13v8a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1v-8z"/><path d="M1.5 5.5 2.8 2.9a1 1 0 0 1 .9-.5h4.6l1.5 3.1"/></svg>
+    const dotColor = vn && dn ? 'linear-gradient(135deg,var(--green),var(--orange))' : vn ? 'var(--green)' : 'var(--orange)';
+    const a = activeCat === cat;
+    h += `<div class="cat-row${a?' active':''}" onclick="setCat('${cat.replace(/'/g,"\\'")}')">
+      <svg class="cat-icon" viewBox="0 0 16 16"><path d="M1.5 5.5h13v8a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1v-8z"/><path d="M1.5 5.5 2.8 2.9a1 1 0 0 1 .9-.4h4.6l1.5 3.1"/></svg>
       <span class="cat-label">${cat}</span>
-      ${dot}
+      <span class="src-dot" style="background:${dotColor}"></span>
       <span class="cat-n">${n}</span>
     </div>`;
   }
-  el.innerHTML = h;
+  document.getElementById('sidebar-list').innerHTML = h;
+  renderDrawer();
+}
+
+// ── Horizontal chip strip (mobile) ────────────────────────────────────────────
+function renderChips() {
+  const strip = document.getElementById('cat-strip');
+  let h = `<div class="cat-chip${activeCat==='__all__'?' active':''}" onclick="setCat('__all__')">All <span class="chip-n">${ALL.length}</span></div>`;
+  for (const cat of CATS) {
+    const n = ALL.filter(w => w.category === cat).length;
+    h += `<div class="cat-chip${activeCat===cat?' active':''}" onclick="setCat('${cat.replace(/'/g,"\\'")}')">
+      ${cat} <span class="chip-n">${n}</span>
+    </div>`;
+  }
+  strip.innerHTML = h;
+}
+
+// ── Drawer list (mobile) ──────────────────────────────────────────────────────
+function renderDrawer() {
+  const allA = activeCat === '__all__';
+  let h = `<div class="cat-row${allA?' active':''}" onclick="setCat('__all__');closeDrawer()">
+    <svg class="cat-icon" viewBox="0 0 16 16"><rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1.2"/><rect x="9" y="1.5" width="5.5" height="5.5" rx="1.2"/><rect x="1.5" y="9" width="5.5" height="5.5" rx="1.2"/><rect x="9" y="9" width="5.5" height="5.5" rx="1.2"/></svg>
+    <span class="cat-label">All wallpapers</span>
+    <span class="cat-n">${ALL.length}</span>
+  </div><div class="sidebar-div"></div>`;
+  for (const cat of CATS) {
+    const n = ALL.filter(w => w.category === cat).length;
+    const a = activeCat === cat;
+    h += `<div class="cat-row${a?' active':''}" onclick="setCat('${cat.replace(/'/g,"\\'")}');closeDrawer()">
+      <svg class="cat-icon" viewBox="0 0 16 16"><path d="M1.5 5.5h13v8a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1v-8z"/><path d="M1.5 5.5 2.8 2.9a1 1 0 0 1 .9-.4h4.6l1.5 3.1"/></svg>
+      <span class="cat-label">${cat}</span>
+      <span class="cat-n">${n}</span>
+    </div>`;
+  }
+  document.getElementById('drawer-list').innerHTML = h;
 }
 
 function setCat(cat) {
   activeCat = cat;
-  document.getElementById('bc-current').textContent = cat === '__all__' ? 'All' : cat;
-  renderSidebar();
+  const label = cat === '__all__' ? 'All' : cat;
+  document.getElementById('bc-current').textContent = label;
+  renderSidebar(); renderChips();
   renderGrid();
   document.querySelector('.grid-wrap').scrollTop = 0;
+  // mobile bottom nav: go back to home icon when picking a cat
+  if (cat === '__all__') setNavActive('home');
 }
 
 // ── Grid ──────────────────────────────────────────────────────────────────────
@@ -358,17 +709,17 @@ function renderGrid() {
     `${label} <span class="toolbar-sub">— ${f.length} image${f.length !== 1 ? 's' : ''}</span>`;
 
   const grid = document.getElementById('grid');
-
   if (!f.length) {
     grid.innerHTML = `<div class="status-msg">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
-      <p>Nothing here</p>
+      <p>Nothing found</p>
     </div>`;
     return;
   }
 
-  grid.innerHTML = f.map(w => `
-    <div class="card" onclick='openLb(${JSON.stringify({ src: w.src, name: w.name })})'>
+  grid.innerHTML = f.map(w => {
+    const data = JSON.stringify({ src: w.src, name: w.name, filename: w.filename });
+    return `<div class="card" onclick='openLb(${data.replace(/'/g,"&#39;")})'>
       <img class="card-img shimmer" src="${w.src}" alt="${w.name}" loading="lazy"
         onload="this.classList.remove('shimmer')"
         onerror="this.closest('.card').style.display='none'">
@@ -376,32 +727,91 @@ function renderGrid() {
         <div class="card-name">${w.name}</div>
         <div class="card-foot">
           <span class="src-pill ${w.source}">${w.source === 'vyrx' ? 'vyrx-dev' : 'dharmx'}</span>
-          <a class="dl-btn" href="${w.src}" download="${w.filename}" target="_blank" onclick="event.stopPropagation()">
+          <a class="card-dl" href="${w.src}" onclick="dlClick(event,this,'${w.filename}')" aria-label="Download">
             <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Save
           </a>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+}
+
+// ── Download helper ───────────────────────────────────────────────────────────
+// Fetches the image as a blob so the browser triggers a real Save dialog
+// instead of navigating to the raw GitHub URL.
+async function triggerDownload(url, filename) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('fetch failed');
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(blobUrl); a.remove(); }, 2000);
+  } catch {
+    // fallback: open in new tab
+    window.open(url, '_blank');
+  }
+}
+
+function dlClick(e, el, filename) {
+  e.stopPropagation();
+  e.preventDefault();
+  triggerDownload(el.href, filename);
 }
 
 // ── Lightbox ──────────────────────────────────────────────────────────────────
-function openLb(d) {
-  document.getElementById('lb-img').src = d.src;
-  document.getElementById('lb-img').alt = d.name;
-  document.getElementById('lb-name').textContent = d.name;
-  const a = document.getElementById('lb-dl');
-  a.href = d.src;
-  a.setAttribute('download', d.name);
+let currentLbData = null;
+
+function openLb(data) {
+  currentLbData = typeof data === 'string' ? JSON.parse(data) : data;
+  document.getElementById('lb-img').src = currentLbData.src;
+  document.getElementById('lb-img').alt = currentLbData.name;
+  document.getElementById('lb-name').textContent = currentLbData.name;
+  // Set up download button
+  const btn = document.getElementById('lb-dl');
+  btn.href = currentLbData.src;
+  btn.onclick = (e) => {
+    e.preventDefault();
+    triggerDownload(currentLbData.src, currentLbData.filename || currentLbData.name);
+  };
   document.getElementById('lightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
+
 function closeLb() {
   document.getElementById('lightbox').classList.remove('open');
-  document.getElementById('lb-img').src = '';
+  setTimeout(() => { document.getElementById('lb-img').src = ''; }, 300);
+  document.body.style.overflow = '';
+  currentLbData = null;
+}
+
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === e.currentTarget || e.target.classList.contains('lb-img-wrap')) closeLb();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+// ── Drawer ────────────────────────────────────────────────────────────────────
+function openDrawer() {
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
   document.body.style.overflow = '';
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+// ── Bottom nav ────────────────────────────────────────────────────────────────
+function setNavActive(id) {
+  ['home','cats','search'].forEach(k => {
+    document.getElementById('bnav-'+k).classList.toggle('active', k === id);
+  });
+}
 
 // ── Search ────────────────────────────────────────────────────────────────────
 let st;
